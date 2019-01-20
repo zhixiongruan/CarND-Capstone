@@ -66,7 +66,7 @@ class WaypointUpdater(object):
         cl_vect = np.array(closest_coord)
         prev_vect = np.array(prev_coord)
         pos_vect = np.array([x, y])
-        val = np.dot(cl_vect, prev_vect, pos_vect, cl_vect)
+        val = np.dot(cl_vect - prev_vect, pos_vect - cl_vect)
         if val > 0:
             closest_idx = (closest_idx + 1) % len(self.wayponits_2d)
         return closest_idx
