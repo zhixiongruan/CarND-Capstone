@@ -13,6 +13,7 @@ import cv2
 import yaml
 
 STATE_COUNT_THRESHOLD = 3
+IMG_COUNTER = 120
 
 class TLDetector(object):
     def __init__(self):
@@ -44,7 +45,7 @@ class TLDetector(object):
         self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
 
         self.bridge = CvBridge()
-        self.light_classifier = TLClassifier(is_site = self.config['is_site'])
+        self.light_classifier = TLClassifier(is_site = self.config["is_site"])
         self.listener = tf.TransformListener()
 
         self.state = TrafficLight.UNKNOWN
@@ -149,9 +150,11 @@ class TLDetector(object):
         stop_line_positions = self.config['stop_line_positions']
         if self.pose and self.waypoints:
             car_wp_idx = self.get_closest_waypoint(self.pose.pose.position.x, self.pose.pose.position.y)
+            if not car_wp_idx:
+               return -1, TrafficLight.UNKNOWN
 
             #TODO find the closest visible traffic light (if one exists)
-            diff = len(self.waypoints.waypoints)
+            diff = min(len(self.waypoints.waypoints), IMG_COUNTER)
             for i, light in enumerate(self.lights):
                 line = stop_line_positions[i]
                 temp_wp_idx = self.get_closest_waypoint(line[0], line[1])
@@ -165,7 +168,6 @@ class TLDetector(object):
         if closest_light:
             state = self.get_light_state(closest_light)
             return line_wp_idx, state
-        self.waypoints = None
         return -1, TrafficLight.UNKNOWN
 
 if __name__ == '__main__':

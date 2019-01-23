@@ -47,6 +47,7 @@ class WaypointUpdater(object):
         self.stopline_wp_idx = -1
         self.waypoints_2d = None
         self.waypoint_tree = None
+        self.current_vel = 0
 
         self.loop()
 

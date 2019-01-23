@@ -43,8 +43,8 @@ class TLClassifier(object):
         #TODO implement light color prediction
         with self.graph.as_default():
 
-            input_image = np.expand_dims(image, axis=0)
-
+            cv2_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)        
+            input_image = np.expand_dims(cv2_image, axis=0)
             (boxes, scores, classes) = self.sess.run([self.boxes, self.scores, self.classes, self.num_detections],
                                          feed_dict={self.image_tensor: input_image})
 
