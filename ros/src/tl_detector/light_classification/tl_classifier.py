@@ -10,9 +10,9 @@ class TLClassifier(object):
     def __init__(self, is_site):
         #TODO load classifier
 
-        path = r'light_classification/model/ssd_sim/sim_frozen_inference_graph.pb'
+        path = r'light_classification/model/sim_frozen_graph.pb'
         if is_site:
-            path = r'light_classification/model/ssd_real/real_frozen_inference_graph.pb'
+            path = r'light_classification/model/site_frozen_graph.pb'
             
         self.graph = tf.Graph()
         with self.graph.as_default():
