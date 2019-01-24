@@ -28,9 +28,6 @@ class TLClassifier(object):
         self.scores = self.graph.get_tensor_by_name('detection_scores:0')
         self.classes = self.graph.get_tensor_by_name('detection_classes:0')
 
-        self.category_index = {1: {'id': 1, 'name': u'red'}, 2: {
-            'id': 2, 'name': u'yellow'}, 3: {'id': 3, 'name': u'green'}}
-
     def get_classification(self, image, wp = 0):
         """Determines the color of the traffic light in the image
 
@@ -55,11 +52,10 @@ class TLClassifier(object):
 
         for i in range(sq_boxes.shape[0]):
             if sq_scores is None or sq_scores[i] > min_score_thresh:
-                if sq_classes[i] in self.category_index.keys():
-                    prediction = sq_classes[i]
-                    print("Found traffic light: {ID:%s  color:%s  pred_score:%.4f}"%(prediction, str(self.category_index[sq_classes[i]]['name']), sq_scores[i]))
-                    min_score_thresh = sq_scores[i] 
-
+                prediction = sq_classes[i]
+                min_score_thresh = sq_scores[i]
+                print("Found traffic light: {i:%d prediction:%s pred_score:%.4f}"%(i, prediction, sq_scores[i]))
+                 
         if prediction == 1:
             return TrafficLight.RED
         elif prediction == 2:
